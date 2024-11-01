@@ -43,7 +43,13 @@ public class Main {
 
             for (Future<int[]> future : futures) {
                 try {
-                    results.add(future.get()); // Це буде блокувати, поки результат не буде доступний
+                    if (future.isCancelled()) {
+                        System.out.println("Завдання скасовано.");
+                    } else {
+                        // Дочекатися завершення завдання і отримати результат
+                        int[] result = future.get(); // Це буде блокувати, поки результат не буде доступний
+                        results.add(result);
+                    }
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
